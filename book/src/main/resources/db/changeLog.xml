@@ -5,8 +5,8 @@
     https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
 
-    <changeSet id="1" author="user">
-        <createTable tableName="user_table">
+    <changeSet id="1" author="book">
+        <createTable tableName="book_table">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>

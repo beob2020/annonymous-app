@@ -13,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "book_table")
-public class BookEO extends PanacheEntityBase {
+public class BookEntity extends PanacheEntityBase {
 
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "book_generator")
     @Id

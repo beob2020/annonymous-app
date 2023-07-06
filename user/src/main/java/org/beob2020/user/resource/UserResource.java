@@ -26,7 +26,9 @@ public class UserResource {
 
     @Path("/getAllUsers")
     @GET
-    public EntityPage<UserEntity> getUser(@DefaultValue("0") @QueryParam("page") int page, @DefaultValue("10") @QueryParam("size") int size, @DefaultValue("id") @QueryParam("sort") String sort) {
+    public EntityPage<UserEntity> getUser(@DefaultValue("0") @QueryParam("page") int page,
+                                          @DefaultValue("10") @QueryParam("size") int size,
+                                          @DefaultValue("id") @QueryParam("sort") String sort) {
         log.info("Get all users Endpoint called");
         return getAllUsersInPages(page, size, sort);
     }
@@ -34,10 +36,10 @@ public class UserResource {
     @POST
     @Path("/createUser")
     @Transactional
-    public Response createUser(@Valid UserEntity userEntity) {
-        log.info("Create user Endpoint called");
+    public Response createUser(UserEntity userEntity) {
+        log.info("createUser Endpoint called");
         UserEntity.persist(userEntity);
-        return Response.ok().status(Response.Status.CREATED).build();
+        return Response.ok("User is Created").status(Response.Status.CREATED).build();
     }
 
 }

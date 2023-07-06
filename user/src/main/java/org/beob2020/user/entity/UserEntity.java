@@ -1,6 +1,7 @@
 package org.beob2020.user.entity;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Page;
@@ -13,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.beob2020.util.CustomLocalDateTimeDeserializer;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -50,6 +52,7 @@ public class UserEntity extends PanacheEntityBase {
 
     @NotNull
     @Column(name = "created_date", updatable = false)
+    @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)
     private LocalDateTime createdDate = LocalDateTime.now();
 
     public enum Rights {

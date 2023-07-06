@@ -12,9 +12,10 @@ public class UserResourceTest {
     @Test
     public void testHelloEndpoint() {
         given()
-          .when().get("/api/user")
+          .when().get("/api")
           .then()
              .statusCode(200)
              .body(is("Hello from RESTEasy Reactive"));
     }
 }
+

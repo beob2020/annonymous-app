@@ -5,7 +5,8 @@ pom.xml.releaseBackup
 pom.xml.versionsBackup
 release.properties
 .flattened-pom.xml
-
+.jpb/
+.mvn/
 # Eclipse
 .project
 .classpath

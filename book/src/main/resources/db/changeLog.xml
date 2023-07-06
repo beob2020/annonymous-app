@@ -1,0 +1,41 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+
+    <changeSet id="1" author="user">
+        <createTable tableName="user_table">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="firstName" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="lastName" type="VARCHAR(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="role" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdDate" type="timestamp(6)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="user">
+        <createSequence sequenceName="user_table_seq" startValue="1" incrementBy="50"/>
+    </changeSet>
+    <changeSet id="3" author="user">
+        <modifyDataType tableName="user_table" columnName="id" newDataType="bigint"/>
+    </changeSet>
+    <changeSet id="4" author="user" dbms="postgresql">
+        <sql>
+            ALTER TABLE user_table
+                ALTER COLUMN id SET DEFAULT nextval('user_table_seq')
+        </sql>
+    </changeSet>
+</databaseChangeLog>

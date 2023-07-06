@@ -1,16 +1,18 @@
 package org.beob2020.user.resource;
 
-import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
-import io.quarkus.hibernate.orm.panache.PanacheQuery;
-import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import lombok.Getter;
+import jakarta.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.beob2020.user.entity.EntityPage;
 import org.beob2020.user.entity.UserEntity;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("/api/user")
+import static org.beob2020.user.entity.UserEntity.getAllUsersInPages;
+
+@Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RegisterRestClient
@@ -22,18 +24,20 @@ public class UserResource {
         return "Hello from RESTEasy Reactive";
     }
 
-    @Path("/all")
+    @Path("/getAllUsers")
     @GET
-    public UserEntity getUser() {
+    public EntityPage<UserEntity> getUser(@DefaultValue("0") @QueryParam("page") int page, @DefaultValue("10") @QueryParam("size") int size, @DefaultValue("id") @QueryParam("sort") String sort) {
         log.info("Get all users Endpoint called");
-        PanacheQuery<PanacheEntityBase> allUsers = UserEntity.findAll();
-        if (allUsers.list().isEmpty()) {
-            log.info("No users found");
-            throw new NotFoundException("No users found");
-        }
-        return new UserEntity();
+        return getAllUsersInPages(page, size, sort);
     }
 
-
+    @POST
+    @Path("/createUser")
+    @Transactional
+    public Response createUser(@Valid UserEntity userEntity) {
+        log.info("Create user Endpoint called");
+        UserEntity.persist(userEntity);
+        return Response.ok().status(Response.Status.CREATED).build();
+    }
 
 }

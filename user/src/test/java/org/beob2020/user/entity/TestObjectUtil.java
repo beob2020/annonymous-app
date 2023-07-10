@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 public class TestObjectUtil {
 
-
     public static UserEntity createUserEntity() {
         UserEntity user = new UserEntity();
         user.setRole(Role.ADMIN);

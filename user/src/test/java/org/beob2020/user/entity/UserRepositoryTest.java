@@ -2,15 +2,16 @@ package org.beob2020.user.entity;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.panache.mock.PanacheMock;
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import org.beob2020.user.dtos.Role;
+import org.beob2020.user.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @QuarkusTest
 class UserRepositoryTest {
 
+    @InjectMock
+    UserService userService;
     @Test
     @TestTransaction
     public void shouldCreateAndFindUser() {
@@ -71,7 +74,7 @@ class UserRepositoryTest {
         UserEntity.persist(user2);
 
         //when
-        EntityPage<UserEntity> result = UserEntity.getAllUsersInPages(0, 10, "id");
+        EntityPage<UserEntity> result = UserService.getAllUsersInPages(0, 10, "id");
 
         //then
         Assertions.assertEquals(users, result.getContent());

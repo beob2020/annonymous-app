@@ -14,10 +14,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.beob2020.user.dtos.Role;
 import org.beob2020.util.CustomLocalDateTimeDeserializer;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -33,9 +35,9 @@ public class UserEntity extends PanacheEntityBase {
     public UUID userId;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private Rights role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @NotNull
     @Email
@@ -55,19 +57,21 @@ public class UserEntity extends PanacheEntityBase {
     @JsonDeserialize(using = CustomLocalDateTimeDeserializer.class)
     private LocalDateTime createdDate = LocalDateTime.now();
 
-    public enum Rights {
-        USER, ADMIN
-    }
 
     public static EntityPage<UserEntity> getAllUsersInPages(int page, int pageSize, String sort) {
         PanacheQuery<PanacheEntityBase> queryAllUsers = UserEntity.findAll(Sort.by(sort));
         if (queryAllUsers == null || queryAllUsers.list().isEmpty()) {
             throw new NotFoundException("No Users found");
         }
-        queryAllUsers.page(Page.of(page, pageSize));
+        PanacheQuery<PanacheEntityBase> pagedUsers = queryAllUsers.page(Page.of(page, pageSize));
+
+           Set<UserEntity> sortedLastNameList = pagedUsers.stream()
+                    .map(UserEntity.class::cast)
+                   .sorted((o1, o2) -> o1.getLastName().compareToIgnoreCase(o2.getLastName()))
+                    .collect(Collectors.toCollection(LinkedHashSet::new));
 
         return EntityPage.<UserEntity>builder()
-                .content(queryAllUsers.list())
+                .content(sortedLastNameList)
                 .page(page)
                 .pageCount(queryAllUsers.pageCount())
                 .totalElements(queryAllUsers.count())
@@ -81,6 +85,4 @@ public class UserEntity extends PanacheEntityBase {
         }
         return userEntity;
     }
-
-
 }

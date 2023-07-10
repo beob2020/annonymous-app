@@ -12,21 +12,10 @@ import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
 public class UserResourceTest {
-
-    @Test
-    public void testHelloEndpoint() {
-        given()
-                .when().get("/api")
-                .then()
-                .statusCode(200)
-                .body(is("Hello from RESTEasy Reactive"));
-    }
-
     @Test
     public void testCreateUserEndpoint() {
         UserEntity user = TestObjectUtil.createUserEntity();
         ObjectMapper mapper = new ObjectMapper();
-
         try {
             String userJson = mapper.writeValueAsString(user);
             given()
@@ -42,4 +31,3 @@ public class UserResourceTest {
 
     }
 }
-

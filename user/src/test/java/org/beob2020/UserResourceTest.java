@@ -1,6 +1,7 @@
 package org.beob2020;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
@@ -22,11 +23,8 @@ import static org.mockito.Mockito.when;
 
 @QuarkusTest
 public class UserResourceTest {
-
     @InjectMock
     EntityManager entityManager;
-
-
 
     @Test
     public void shouldFindAllUsersInPages() {
@@ -43,15 +41,17 @@ public class UserResourceTest {
     public void testCreateUserEndpoint() {
         UserEntity user = TestObjectUtil.createUserEntity();
         ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper objectMapper = mapper.registerModule(new JavaTimeModule());
+
         try {
-            String userJson = mapper.writeValueAsString(user);
+            String userJson = objectMapper.writeValueAsString(user);
             given()
                     .body(userJson)
                     .contentType(ContentType.JSON)
                     .when().post("/api/createUser")
                     .then()
                     .statusCode(201)
-                    .body(is("User is created"));
+                    .body(is("User is Created"));
         } catch (Exception e) {
             e.printStackTrace();
         }

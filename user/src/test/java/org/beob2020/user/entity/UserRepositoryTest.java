@@ -22,6 +22,7 @@ class UserRepositoryTest {
 
     @InjectMock
     UserService userService;
+
     @Test
     @TestTransaction
     public void shouldCreateAndFindUser() {

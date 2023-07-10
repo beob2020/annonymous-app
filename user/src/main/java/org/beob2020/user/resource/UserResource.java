@@ -2,7 +2,7 @@ package org.beob2020.user.resource;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
+import jakarta.inject.Singleton;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -20,6 +20,7 @@ import java.util.UUID;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @RegisterRestClient
+@Singleton
 @Slf4j
 public class UserResource {
     @Inject
@@ -55,7 +56,7 @@ public class UserResource {
             UserService.createNewUser(createUserDto);
             return Response.ok("User is Created").status(Response.Status.CREATED).build();
         }
-        throw new BadRequestException("User is not created");
+        throw new BadRequestException("User is not Created");
     }
 
     @PUT
